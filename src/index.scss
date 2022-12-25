@@ -21,8 +21,10 @@ dd {
 
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role='list'],
-ol[role='list'] {
+ol[role='list'],a
+ {
   list-style: none;
+  text-decoration: none;
 }
 
 /* Set core root defaults */
@@ -78,4 +80,8 @@ select {
 body {
   margin-inline: auto;
   max-width: calc(100% - 5rem);
+  font-family: 'Open Sans', sans-serif;
 }
+
+/* mixins */ 
+
