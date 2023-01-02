@@ -1,0 +1,46 @@
+@mixin devices ($breakpoint) { //the name of the mixin is devices
+
+    @if $breakpoint == smallscreen {
+        @media only screen and (max-width: 981px) {
+          @content;
+        }
+      }
+  
+    @if $breakpoint == tablet {    
+    @media only screen and (max-width: 680px) {
+      @content;
+    }
+  }
+  
+  @if $breakpoint == mobile {
+    @media only screen and (max-width: 481px) {
+      @content;
+    }
+  }
+  }
+
+
+.authentication-container {
+    display: flex;
+    justify-content: center;
+    gap: 10rem;
+
+    @include devices(tablet) {
+        flex-direction: column;
+        gap: 5rem;
+        align-items: center;
+      }
+      @include devices(mobile) {
+        gap: 5rem;
+        flex-direction: column;
+        align-items: center;
+    
+      }
+      @include devices(smallscreen) {
+        gap: 5rem;
+        flex-direction: column;
+        align-items: center;
+    
+      }
+}
+

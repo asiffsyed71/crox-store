@@ -20,10 +20,11 @@
     justify-content: flex-end;
     gap: 15px;
 
-    .nav-link {
-      padding: 10px 15px;
+    .nav-links {
+      padding: 0 5px;
       cursor: pointer;
       font-weight: bold;
+      color: black
     }
  
   }

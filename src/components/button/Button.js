@@ -6,15 +6,13 @@ const CUSTOM_BUTTON_CLASSNAMES = {
   google: "google-sign-in",
 };
 
-const Button = (props) => {
-  const { children: content, type, variant } = props;
-
+const Button = ({ children: content, variant, ...otherProps }) => {
   return (
     <button
       className={`button-container ${
         variant && CUSTOM_BUTTON_CLASSNAMES[variant]
       }`}
-      type={type}
+      {...otherProps}
     >
       {content}
     </button>
