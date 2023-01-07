@@ -4,7 +4,6 @@ import FormInput from "../form-input/FormInput";
 import "./sign-in-form.styles.scss";
 import {
   signInWithGooglePopup,
-  createUserDocFromAuth,
   signInWithEmailPassword,
 } from "../../utils/firebase.util";
 
@@ -28,18 +27,19 @@ const SignInForm = () => {
   };
 
   const googleAuthHandler = async () => {
-    const { user } = await signInWithGooglePopup();
     try {
-      await createUserDocFromAuth(user);
+      await signInWithGooglePopup();
     } catch (error) {
-      console.log(error.message);
+      if(error.code === 'auth/popup-closed-by-user') {
+        alert('Google Sign In cancelled!')
+      }
     }
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await signInWithEmailPassword(email, password);
+      await signInWithEmailPassword(email, password);
       setFormFields(defaultFields);
     } catch (error) {
       switch (error.code) {
