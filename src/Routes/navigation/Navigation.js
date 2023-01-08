@@ -3,7 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 import { ReactComponent as AppLogo } from "../../assets/crown.svg";
 import { UserContext } from "../../contexts/user.context";
 import { signoutUser } from "../../utils/firebase.util";
-import "./navigation.styles.scss";
+import "./Nav.styles.scss";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);

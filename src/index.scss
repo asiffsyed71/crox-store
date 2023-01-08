@@ -79,8 +79,9 @@ select {
 /* layout width */
 
 body {
-  margin-inline: auto;
+  margin: 20px auto;
   max-width: calc(100% - 5rem);
+  // padding: 20px 40px;
   font-family: 'Open Sans Condensed', sans-serif;
 }
 
