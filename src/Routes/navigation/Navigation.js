@@ -3,14 +3,14 @@ import { Outlet, Link } from "react-router-dom";
 import { ReactComponent as AppLogo } from "../../assets/crown.svg";
 import CartDropdown from "../../components/cart-dropdown/CartDropdown";
 import CartIcon from "../../components/cart-icon/CartIcon";
-import { CartContex } from "../../contexts/cart.context";
+import { CartContext } from "../../contexts/cart.context";
 import { UserContext } from "../../contexts/user.context";
 import { signoutUser } from "../../utils/firebase.util";
 import "./Nav.styles.scss";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
-  const {isCartOpen } = useContext(CartContex)
+  const {isCartOpen } = useContext(CartContext)
 
 
   const logoutHandler = async () => {

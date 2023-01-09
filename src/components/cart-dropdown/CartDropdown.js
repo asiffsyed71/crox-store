@@ -1,13 +1,21 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { CartContex } from "../../contexts/cart.context";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../contexts/cart.context";
 import Button from "../button/Button";
 import CartItem from "../cart-item/CartItem";
 import "./CartDropdown.styles.scss";
 
 const CartDropdown = () => {
-  const cartRef = useRef();
-  //   const { isCartOpen, setIsCartOpen, cartItems } = useContext(CartContex);
-  const { cartItems } = useContext(CartContex);
+  //   const cartRef = useRef();
+  //   const { isCartOpen, setIsCartOpen, cartItems } = useContext(CartContext);
+  const navigate = useNavigate();
+  const { isCartOpen, cartItems, setIsCartOpen } = useContext(CartContext);
+  const goToChecoutHandler = () => {
+    if (isCartOpen) {
+      setIsCartOpen((isCartOpenState) => !isCartOpenState);
+    }
+    navigate("/checkout");
+  };
 
   //   useEffect(() => {
   //     const clickEvent = (event) => {
@@ -29,17 +37,19 @@ const CartDropdown = () => {
     // <div className="cart-dropdown-container" ref={cartRef}>
     <div className="cart-dropdown-container">
       {cartItems.length > 0 ? (
-        <div className="cart-items">
-          {cartItems.map((cartItem) => (
-            <CartItem key={cartItem.id} item={cartItem} />
-          ))}
-        </div>
+        <>
+          <div className="cart-items">
+            {cartItems.map((cartItem) => (
+              <CartItem key={cartItem.id} item={cartItem} />
+            ))}
+          </div>
+          <Button onClick={goToChecoutHandler}>Check out</Button>
+        </>
       ) : (
         <div className="empty-message">
-          <p>No Items in your Cart</p>
+          <p>No items in your Cart</p>
         </div>
       )}
-      <Button>Check out</Button>
     </div>
   );
 };

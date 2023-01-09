@@ -1,0 +1,40 @@
+.checkout-container {
+    width: 55%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px auto 0;
+  
+    .checkout-header {
+      width: 100%;
+      padding: 10px 0;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid darkgrey;
+  
+      .header-block {
+        text-transform: uppercase;
+        flex-basis:25%;
+        text-align: center;
+  
+        // &:last-child {
+        //   width: 8%;
+        // }
+      }
+    }
+
+    .empty-cart {
+        margin-top: 100px;
+    }
+  
+    .total {
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: 50px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  }
