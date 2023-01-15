@@ -3,7 +3,7 @@ import './CategoryItem.style.scss';
 
 const CategoryItem = ({title, imageUrl }) => {
   return (
-    <div className="category-container">
+    <div className="category-container-home">
     <div
       className="background-image"
       style={{

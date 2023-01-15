@@ -7,9 +7,18 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -47,7 +56,7 @@ export const createUserDocFromAuth = async (userAuth, additionalInfo) => {
         displayName,
         email,
         createdAt,
-        ...additionalInfo
+        ...additionalInfo,
       });
     } catch (error) {
       console.log("error creating the user", error.message);
@@ -61,17 +70,44 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
-
-export const signInWithEmailPassword = async (email,password) => {
-    if (!email || !password) return;
-    return await signInWithEmailAndPassword(auth, email, password)
-}
-
+export const signInWithEmailPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await signInWithEmailAndPassword(auth, email, password);
+};
 
 export const signoutUser = async () => {
-    return await signOut(auth);
-}
-  
+  return await signOut(auth);
+};
+
 export const authStateChanged = (callback) => {
-  return onAuthStateChanged(auth, callback)
-}
+  return onAuthStateChanged(auth, callback);
+};
+
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+  await batch.commit();
+  console.log("------------------------------Db Updated");
+};
+
+export const getCollectionAndDocuments = async (collectionKey) => {
+  const collectionRef = collection(db, collectionKey);
+  const q = query(collectionRef);
+  const querySnapshot = await getDocs(q);
+  const categoriesMap = querySnapshot.docs.reduce(
+    (accumulator, docSnapshot) => {
+      const { title, items } = docSnapshot.data();
+      accumulator[title.toLowerCase()] = items;
+      return accumulator
+    },
+    {}
+  );
+  return categoriesMap;
+};

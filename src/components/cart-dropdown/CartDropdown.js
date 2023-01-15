@@ -1,41 +1,45 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useMatch } from "react-router-dom";
 import { CartContext } from "../../contexts/cart.context";
 import Button from "../button/Button";
 import CartItem from "../cart-item/CartItem";
 import "./CartDropdown.styles.scss";
 
 const CartDropdown = () => {
-  //   const cartRef = useRef();
-  //   const { isCartOpen, setIsCartOpen, cartItems } = useContext(CartContext);
   const navigate = useNavigate();
+  const matchUrlPattern = useMatch("checkout");
   const { isCartOpen, cartItems, setIsCartOpen } = useContext(CartContext);
+  // const cartRef = useRef();
+
+  const toggleCart = () => {
+    setIsCartOpen((isCartOpenState) => !isCartOpenState);
+  };
   const goToChecoutHandler = () => {
     if (isCartOpen) {
-      setIsCartOpen((isCartOpenState) => !isCartOpenState);
+      toggleCart();
     }
     navigate("/checkout");
   };
+  // useEffect(() => {
+  //   if (isCartOpen) {
+  //     cartRef.current.focus();
+  //   }
+  // }, [isCartOpen]);
 
-  //   useEffect(() => {
-  //     const clickEvent = (event) => {
-  //       if (
-  //         isCartOpen &&
-  //         cartRef.current && !cartRef.current.contains(event.target) && !/.*cart.+/.test(event.target.className.baseVal) && !/.*cart.+/.test(event.target.className)
-  //       ) {
-  //         setIsCartOpen(false);
-  //       }
-  //     };
-  //     document.addEventListener("mousedown", clickEvent);
-
-  //     return () => {
-  //       document.removeEventListener("mousedown", clickEvent);
-  //     };
-  //   }, [isCartOpen, setIsCartOpen]);
-
+  // const handleBlur = (event) => {
+  //   console.log(event)
+  //   if (!event.currentTarget.contains(event.relatedTarget)) {
+  //     toggleCart();
+  //   }
+  // };
+  
   return (
-    // <div className="cart-dropdown-container" ref={cartRef}>
-    <div className="cart-dropdown-container">
+    <div
+      className="cart-dropdown-container"
+      // ref={cartRef}
+      // onBlur={handleBlur}
+      tabIndex="1"
+    >
       {cartItems.length > 0 ? (
         <>
           <div className="cart-items">
@@ -43,7 +47,20 @@ const CartDropdown = () => {
               <CartItem key={cartItem.id} item={cartItem} />
             ))}
           </div>
-          <Button onClick={goToChecoutHandler}>Check out</Button>
+          <div className="cart-buttons">
+            {!matchUrlPattern ? (
+              <Button onClick={goToChecoutHandler} variant="inverted">
+                Check Out
+              </Button>
+            ) : (
+              <Button variant="inverted" onClick={toggleCart}>
+                Buy Now
+              </Button>
+            )}
+            <Button onClick={toggleCart} variant="inverted">
+              Close
+            </Button>
+          </div>
         </>
       ) : (
         <div className="empty-message">
