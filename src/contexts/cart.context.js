@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const CartContext = createContext({
   isCartOpen: false,
@@ -86,6 +86,15 @@ const calculateTotalPrice = (items) => {
 export const CartContexProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    setTotalQuantity(calculateTotalQuantity(cartItems));
+  }, [cartItems]);
+  useEffect(() => {
+    setTotalPrice(calculateTotalPrice(cartItems));
+  }, [cartItems]);
 
   const addItemToCart = (productToAdd) => {
     setCartItems(addCartItem(cartItems, productToAdd));
@@ -98,9 +107,6 @@ export const CartContexProvider = ({ children }) => {
   const clearItemFromCart = (cartItem) => {
     setCartItems(clearCartItem(cartItems, cartItem));
   };
-  const totalQuantity = calculateTotalQuantity(cartItems);
-  const totalPrice = calculateTotalPrice(cartItems);
-  //   console.log(totalPrice)
   const value = {
     isCartOpen,
     setIsCartOpen,
