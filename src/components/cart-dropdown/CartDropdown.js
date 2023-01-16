@@ -1,9 +1,14 @@
 import React, { useContext } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
 import { CartContext } from "../../contexts/cart.context";
-import Button from "../button/Button";
+import Button, { CUSTOM_BUTTON_CLASSNAMES } from "../button/Button";
 import CartItem from "../cart-item/CartItem";
-import "./CartDropdown.styles.scss";
+import {
+  ButtonContainer,
+  CartDropdownContainer,
+  CartItemsContainer,
+  EmptyCartMessage,
+} from "./CartDropdown.styles.js";
 
 const CartDropdown = () => {
   const navigate = useNavigate();
@@ -32,42 +37,44 @@ const CartDropdown = () => {
   //     toggleCart();
   //   }
   // };
-  
+
   return (
-    <div
-      className="cart-dropdown-container"
+    <CartDropdownContainer
       // ref={cartRef}
       // onBlur={handleBlur}
       tabIndex="1"
     >
       {cartItems.length > 0 ? (
         <>
-          <div className="cart-items">
+          <CartItemsContainer>
             {cartItems.map((cartItem) => (
               <CartItem key={cartItem.id} item={cartItem} />
             ))}
-          </div>
-          <div className="cart-buttons">
+          </CartItemsContainer>
+          <ButtonContainer>
             {!matchUrlPattern ? (
               <Button onClick={goToChecoutHandler} variant="inverted">
                 Check Out
               </Button>
             ) : (
-              <Button variant="inverted" onClick={toggleCart}>
+              <Button
+                variant={CUSTOM_BUTTON_CLASSNAMES.inverted}
+                onClick={toggleCart}
+              >
                 Buy Now
               </Button>
             )}
-            <Button onClick={toggleCart} variant="inverted">
-              Close
-            </Button>
-          </div>
+          </ButtonContainer>
         </>
       ) : (
-        <div className="empty-message">
+        <EmptyCartMessage>
           <p>No items in your Cart</p>
-        </div>
+        </EmptyCartMessage>
       )}
-    </div>
+      <Button onClick={toggleCart} variant={CUSTOM_BUTTON_CLASSNAMES.inverted}>
+        Close
+      </Button>
+    </CartDropdownContainer>
   );
 };
 

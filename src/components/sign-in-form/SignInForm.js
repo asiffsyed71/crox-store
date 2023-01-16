@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import Button from "../button/Button";
+import Button, {CUSTOM_BUTTON_CLASSNAMES} from "../button/Button";
 import FormInput from "../form-input/FormInput";
 import "./sign-in-form.styles.scss";
 import {
   signInWithGooglePopup,
   signInWithEmailPassword,
 } from "../../utils/firebase.util";
+import { useNavigate } from "react-router-dom";
 
 const defaultFields = {
   email: "",
@@ -15,6 +16,7 @@ const defaultFields = {
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFields);
   const { email, password } = formFields;
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -29,6 +31,7 @@ const SignInForm = () => {
   const googleAuthHandler = async () => {
     try {
       await signInWithGooglePopup();
+      navigate('/shop')
     } catch (error) {
       if(error.code === 'auth/popup-closed-by-user') {
         alert('Google Sign In cancelled!')
@@ -41,6 +44,7 @@ const SignInForm = () => {
     try {
       await signInWithEmailPassword(email, password);
       setFormFields(defaultFields);
+      navigate('/shop');
     } catch (error) {
       switch (error.code) {
         case "auth/user-not-found":
@@ -81,7 +85,7 @@ const SignInForm = () => {
         />
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button type="button" variant="google" onClick={googleAuthHandler}>
+          <Button type="button" variant={CUSTOM_BUTTON_CLASSNAMES.google} onClick={googleAuthHandler}>
             Google Sign In
           </Button>
         </div>

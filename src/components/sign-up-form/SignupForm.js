@@ -5,7 +5,9 @@ import {
 } from "../../utils/firebase.util";
 import Button from "../button/Button";
 import FormInput from "../form-input/FormInput";
+import { useNavigate } from "react-router-dom";
 import "./sign-up-form.styles.scss";
+
 
 const defaultFields = {
   displayName: "",
@@ -18,6 +20,7 @@ const SignupForm = () => {
 
   const [formFields, setFormFields] = useState(defaultFields);
   const { displayName, email, password, confirmPassword } = formFields;
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -39,6 +42,7 @@ const SignupForm = () => {
       );
       await createUserDocFromAuth(user, { displayName });
       setFormFields(defaultFields);
+      navigate("/shop")
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Email Id already in use.");
