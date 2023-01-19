@@ -17,7 +17,7 @@ const CartDropdown = () => {
   // const cartRef = useRef();
 
   const toggleCart = () => {
-    setIsCartOpen((isCartOpenState) => !isCartOpenState);
+    setIsCartOpen(false);
   };
   const goToChecoutHandler = () => {
     if (isCartOpen) {
