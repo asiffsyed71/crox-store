@@ -4,12 +4,13 @@ import { ReactComponent as AppLogo } from "../../assets/crown.svg";
 import CartDropdown from "../../components/cart-dropdown/CartDropdown";
 import CartIcon from "../../components/cart-icon/CartIcon";
 import { CartContext } from "../../contexts/cart.context";
-import { UserContext } from "../../contexts/user.context";
 import { signoutUser } from "../../utils/firebase.util";
 import { NavigationContainer, LogoContainer, NavLinks, NavLinksContainer } from "./Nav.styles";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/user.selector";
 
 const Navigation = () => {
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser)
   const { isCartOpen } = useContext(CartContext);
   const navigate = useNavigate();
 
