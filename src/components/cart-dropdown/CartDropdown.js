@@ -9,15 +9,20 @@ import {
   CartItemsContainer,
   EmptyCartMessage,
 } from "./CartDropdown.styles.js";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCartItems, selectIsCartOpen } from "../../store/cart/cart.selector";
+import { setIsCartOpen } from "../../store/cart/cart.action";
 
 const CartDropdown = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isCartOpen = useSelector(selectIsCartOpen);
+  const cartItems = useSelector(selectCartItems);
   const matchUrlPattern = useMatch("checkout");
-  const { isCartOpen, cartItems, setIsCartOpen } = useContext(CartContext);
   // const cartRef = useRef();
 
   const toggleCart = () => {
-    setIsCartOpen(false);
+    dispatch(setIsCartOpen(!isCartOpen))
   };
   const goToChecoutHandler = () => {
     if (isCartOpen) {

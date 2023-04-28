@@ -3,15 +3,15 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ReactComponent as AppLogo } from "../../assets/crown.svg";
 import CartDropdown from "../../components/cart-dropdown/CartDropdown";
 import CartIcon from "../../components/cart-icon/CartIcon";
-import { CartContext } from "../../contexts/cart.context";
 import { signoutUser } from "../../utils/firebase.util";
 import { NavigationContainer, LogoContainer, NavLinks, NavLinksContainer } from "./Nav.styles";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selector";
+import { selectIsCartOpen } from "../../store/cart/cart.selector";
 
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser)
-  const { isCartOpen } = useContext(CartContext);
+  const isCartOpen = useSelector(selectIsCartOpen)
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
