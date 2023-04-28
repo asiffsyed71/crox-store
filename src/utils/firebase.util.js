@@ -101,13 +101,15 @@ export const getCollectionAndDocuments = async (collectionKey) => {
   const collectionRef = collection(db, collectionKey);
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
-  const categoriesMap = querySnapshot.docs.reduce(
-    (accumulator, docSnapshot) => {
-      const { title, items } = docSnapshot.data();
-      accumulator[title.toLowerCase()] = items;
-      return accumulator
-    },
-    {}
-  );
-  return categoriesMap;
+
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data())
+  // const categoriesMap = querySnapshot.docs.reduce(
+  //   (accumulator, docSnapshot) => {
+  //     const { title, items } = docSnapshot.data();
+  //     accumulator[title.toLowerCase()] = items;
+  //     return accumulator
+  //   },
+  //   {}
+  // );
+  // return categoriesMap;
 };
