@@ -11,7 +11,7 @@ export const INITIAL_CART_STATE = {
       case CART_ACTION_TYPES.SET_CART_ITEMS:
         return {
           ...state,
-          cartIems: payload,
+          cartItems: payload,
         };
   
       case CART_ACTION_TYPES.SET_IS_CART_OPEN:

@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate, useMatch } from "react-router-dom";
-import { CartContext } from "../../contexts/cart.context";
 import Button, { CUSTOM_BUTTON_CLASSNAMES } from "../button/Button";
 import CartItem from "../cart-item/CartItem";
 import {
