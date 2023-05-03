@@ -1,6 +1,7 @@
 import React from "react";
 import {
   BaseButton,
+  ButtonSpinner,
   GoogleSignInButton,
   InvertedButton,
 } from "./button.styles";
@@ -20,9 +21,9 @@ export const getButton = (buttonType = CUSTOM_BUTTON_CLASSNAMES.base) => {
   return buttonVariants[buttonType];
 };
 
-const Button = ({ children: content, variant, ...otherProps }) => {
+const Button = ({ children: content, variant, isLoading, ...otherProps }) => {
   const CustomButton = getButton(variant);
-  return <CustomButton {...otherProps}>{content}</CustomButton>;
+  return <CustomButton {...otherProps}>{isLoading ? <ButtonSpinner /> : content}</CustomButton>;
 };
 
 export default Button;
