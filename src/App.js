@@ -4,22 +4,17 @@ import Navigation from "./Routes/navigation/Navigation";
 import Authentication from "./Routes/Authentication/Authentication";
 import Shop from "./Routes/Shop/Shop";
 import Checkout from "./Routes/Checkout/Checkout";
-import { authStateChanged, createUserDocFromAuth } from "./utils/firebase.util";
+import { authStateChanged, createUserDocFromAuth, getCurrentUser } from "./utils/firebase.util";
 import { useEffect } from "react";
 import { setCurrentUser } from "./store/user/user.action";
 import { useDispatch } from "react-redux";
+import { checkUserSession } from "./store/user/user.action";
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribeFn = authStateChanged((user) => {
-      if (user) {
-        createUserDocFromAuth(user);
-      }
-      dispatch(setCurrentUser(user));
-    });
-    return unsubscribeFn;
+    dispatch(checkUserSession())
   }, [dispatch]);
   return (
     <Routes>
