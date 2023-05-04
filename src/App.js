@@ -1,14 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./Routes/Home/Home";
-import Navigation from "./Routes/navigation/Navigation";
-import Authentication from "./Routes/Authentication/Authentication";
-import Shop from "./Routes/Shop/Shop";
-import Checkout from "./Routes/Checkout/Checkout";
-import { authStateChanged, createUserDocFromAuth, getCurrentUser } from "./utils/firebase.util";
-import { useEffect } from "react";
-import { setCurrentUser } from "./store/user/user.action";
+import { useEffect, lazy, Suspense } from "react";
 import { useDispatch } from "react-redux";
 import { checkUserSession } from "./store/user/user.action";
+import Spinner from "./components/spinner/spinner.component";
+
+const Home = lazy(() => import("./Routes/Home/Home"))
+const Navigation = lazy(() => import("./Routes/navigation/Navigation"));
+const Authentication = lazy(() => import("./Routes/Authentication/Authentication"));
+const Shop = lazy(() => import("./Routes/Shop/Shop"));
+const Checkout = lazy(() => import("./Routes/Checkout/Checkout"));
 
 function App() {
   const dispatch = useDispatch();
@@ -17,14 +17,16 @@ function App() {
     dispatch(checkUserSession())
   }, [dispatch]);
   return (
-    <Routes>
-      <Route path="/" element={<Navigation />}>
-        <Route index element={<Home />} />
-        <Route path="shop/*" element={<Shop />} />
-        <Route path="auth" element={<Authentication />} />
-        <Route path="checkout" element={<Checkout />} />
-      </Route>
-    </Routes>
+    <Suspense fallback={<Spinner />}>
+      <Routes>
+        <Route path="/" element={<Navigation />}>
+          <Route index element={<Home />} />
+          <Route path="shop/*" element={<Shop />} />
+          <Route path="auth" element={<Authentication />} />
+          <Route path="checkout" element={<Checkout />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }
 
