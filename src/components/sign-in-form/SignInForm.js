@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Button, {CUSTOM_BUTTON_CLASSNAMES} from "../button/Button";
+import Button, { CUSTOM_BUTTON_CLASSNAMES } from "../button/Button";
 import FormInput from "../form-input/FormInput";
 import "./sign-in-form.styles.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { emailSignInStart, googleSignInStart } from "../../store/user/user.action";
-import { selectCurrentUser } from "../../store/user/user.selector";
+import {
+  emailSignInStart,
+  googleSignInStart,
+} from "../../store/user/user.action";
+import {
+  selectCurrentUser,
+  selectUserError,
+} from "../../store/user/user.selector";
 
 const defaultFields = {
   email: "",
@@ -18,11 +24,27 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
+  const error = useSelector(selectUserError);
   useEffect(() => {
-    if(user) {
-      navigate('/shop')
+    if (user) {
+      navigate("/shop");
     }
-  },[user])
+    if (error) {
+      switch (error.code) {
+        case "auth/popup-closed-by-user":
+          alert("Google Sign In cancelled!");
+          break;
+        case "auth/user-not-found":
+          alert("Accound not found");
+          break;
+        case "auth/wrong-password":
+          alert("Incorrect Password");
+          break;
+        default:
+          console.log(error);
+      }
+    }
+  }, [user, error]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -35,36 +57,12 @@ const SignInForm = () => {
   };
 
   const googleAuthHandler = () => {
-    dispatch(googleSignInStart())
-    // try {
-    //   await signInWithGooglePopup();
-      
-    // } catch (error) {
-    //   if(error.code === 'auth/popup-closed-by-user') {
-    //     alert('Google Sign In cancelled!')
-    //   }
-    // }
+    dispatch(googleSignInStart());
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    dispatch(emailSignInStart(email,password))
-    // try {
-    //   await signInWithEmailPassword(email, password);
-    //   setFormFields(defaultFields);
-    //   navigate('/shop');
-    // } catch (error) {
-    //   switch (error.code) {
-    //     case "auth/user-not-found":
-    //       alert("Accound not found");
-    //       break;
-    //     case "auth/wrong-password":
-    //       alert("Incorrect Password");
-    //       break;
-    //     default:
-    //       console.log(error);
-    //   }
-    // }
+    dispatch(emailSignInStart(email, password));
   };
 
   return (
@@ -93,7 +91,11 @@ const SignInForm = () => {
         />
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button type="button" variant={CUSTOM_BUTTON_CLASSNAMES.google} onClick={googleAuthHandler}>
+          <Button
+            type="button"
+            variant={CUSTOM_BUTTON_CLASSNAMES.google}
+            onClick={googleAuthHandler}
+          >
             Google Sign In
           </Button>
         </div>

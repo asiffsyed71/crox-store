@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./sign-up-form.styles.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpStart } from "../../store/user/user.action";
-import { selectCurrentUser } from "../../store/user/user.selector";
+import { selectCurrentUser, selectUserError } from "../../store/user/user.selector";
 
 
 const defaultFields = {
@@ -22,11 +22,21 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
+  const error = useSelector(selectUserError);
   useEffect(() => {
     if(user) {
       navigate('/shop')
     }
-  },[user])
+    if (error) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          alert("Email already in use!!");
+          break;
+        default:
+          console.log(error);
+      }
+    }
+  },[user,error])
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -38,23 +48,6 @@ const SignupForm = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     dispatch(signUpStart(email,password,displayName))
-    // if (password !== confirmPassword) {
-    //   alert("passwords don't match");
-    //   return;
-    // }
-    // try {
-    //   const { user } = await createAuthUserWithEmailAndPassword(
-    //     email,
-    //     password
-    //   );
-    //   await createUserDocFromAuth(user, { displayName });
-    //   setFormFields(defaultFields);
-    //   navigate("/shop")
-    // } catch (error) {
-    //   if (error.code === "auth/email-already-in-use") {
-    //     alert("Email Id already in use.");
-    //   }
-    // }
   };
 
   return (
