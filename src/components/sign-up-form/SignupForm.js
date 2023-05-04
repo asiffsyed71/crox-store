@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocFromAuth,
-} from "../../utils/firebase.util";
+import React, { useEffect, useState } from "react";
 import Button from "../button/Button";
 import FormInput from "../form-input/FormInput";
 import { useNavigate } from "react-router-dom";
 import "./sign-up-form.styles.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { signUpStart } from "../../store/user/user.action";
+import { selectCurrentUser } from "../../store/user/user.selector";
 
 
 const defaultFields = {
@@ -21,6 +20,13 @@ const SignupForm = () => {
   const [formFields, setFormFields] = useState(defaultFields);
   const { displayName, email, password, confirmPassword } = formFields;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(selectCurrentUser);
+  useEffect(() => {
+    if(user) {
+      navigate('/shop')
+    }
+  },[user])
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -29,25 +35,26 @@ const SignupForm = () => {
     });
   };
 
-  const handleFormSubmit = async (event) => {
+  const handleFormSubmit = (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) {
-      alert("passwords don't match");
-      return;
-    }
-    try {
-      const { user } = await createAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
-      await createUserDocFromAuth(user, { displayName });
-      setFormFields(defaultFields);
-      navigate("/shop")
-    } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
-        alert("Email Id already in use.");
-      }
-    }
+    dispatch(signUpStart(email,password,displayName))
+    // if (password !== confirmPassword) {
+    //   alert("passwords don't match");
+    //   return;
+    // }
+    // try {
+    //   const { user } = await createAuthUserWithEmailAndPassword(
+    //     email,
+    //     password
+    //   );
+    //   await createUserDocFromAuth(user, { displayName });
+    //   setFormFields(defaultFields);
+    //   navigate("/shop")
+    // } catch (error) {
+    //   if (error.code === "auth/email-already-in-use") {
+    //     alert("Email Id already in use.");
+    //   }
+    // }
   };
 
   return (
